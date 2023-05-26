@@ -167,6 +167,7 @@ import {
     createList();
   };
   
+  // Changes Login Button to (dis)abled by value
   selectorIdP.addEventListener("change", idpSelectionHandler);
   function idpSelectionHandler() {
     if (selectorIdP.value === "") {
@@ -175,7 +176,8 @@ import {
       buttonLogin.removeAttribute("disabled");
     }
   }
-  
+
+// Changes Get Pod URL(s) Button to (dis)abled by value
   selectorPod.addEventListener("change", podSelectionHandler);
   function podSelectionHandler() {
     if (selectorPod.value === "") {
