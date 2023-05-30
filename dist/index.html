@@ -7,6 +7,7 @@
   <script defer src="./index.js"></script>
   <!-- <script defer src="/src/app.js"></script> -->
   <link rel="stylesheet" href="my-demo.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -62,6 +63,7 @@ RDF 1.1 Primer</textarea>
       <br>
     </div>
   </div>
+
   <div id="results" class="panel">
     <div class="row">
       <label>Create Reading List Status</label>
@@ -76,10 +78,22 @@ RDF 1.1 Primer</textarea>
   </div>
 
   <!-- Test Visual Representation -->
-  <div class="row"> 
-    <img id="img" src="" alt="Image"/>
-    <br>
-    <button type="buttonNext" id="btnNext">Next</button>
+  <div class="panel"> 
+    <div class="row"> 
+      <div class="col-sm-6">
+        <img id="img" src="" alt="Image" class="img-responsive" style="height:100%"/>
+        <br>
+        <button type="buttonNext" id="btnNext" class="btn btn-primary btn-block">Next</button>  
+      </div>
+      <div class="col-sm-6">
+        <h3>Product Description</h3>
+        <div class="btn-group btn-group-justified">
+          <a id="btnDislike" href="#" class="btn btn-danger glyphicon glyphicon-thumbs-down"></a>
+          <a id="btnLike" href="#" class="btn btn-success glyphicon glyphicon-thumbs-up"></a>
+        </div>
+      </div>
+    </div>
+    
   </div>
 
 
