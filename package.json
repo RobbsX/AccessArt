@@ -16,6 +16,9 @@
     "@inrupt/solid-client-authn-browser": "^1.16.0",
     "@inrupt/vocab-common-rdf": "^1.0.5",
     "@inrupt/vocab-solid": "^1.0.4",
+    "axios": "^1.4.0",
+    "node-fetch": "^3.3.1",
+    "papaparse": "^5.4.1",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {

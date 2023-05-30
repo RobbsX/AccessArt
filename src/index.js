@@ -186,3 +186,54 @@ import {
       buttonCreate.removeAttribute("disabled");
     }
   }
+
+
+// app.js code insert
+
+
+// const fetch = require("node-fetch")
+// const axios = require('axios');
+// const Papa = require('papaparse');
+
+// Define HTML elements
+const buttonNext = document.getElementById("btnNext");
+const img = document.getElementById('img');
+var imageList = [];
+
+async function getImageList() {
+  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?images_exist=1");
+  const jsonData = await response.json();
+  // console.log(jsonData);
+  var buildList = [];
+  jsonData.records.forEach((record) => {
+    // console.log(record["_primaryImageId"]);
+    buildList.push("https://framemark.vam.ac.uk/collections/" + record["_primaryImageId"] + "/full/!500,500/0/default.jpg");
+  });
+  return buildList;
+}
+getImageList()
+  .then((imageList) => {
+    // Set initial image 
+    img.src = imageList[0];
+    // Set initial image index
+    let currentIndex = 0;
+
+    // Function to iterate through images
+    function getNextImage() {
+      // Increment the index and handle wrap-around
+      currentIndex = (currentIndex + 1) % imageList.length;
+      // Set the src attribute to the next image in the list
+      img.src = imageList[currentIndex];
+    }
+
+    // Define actions on Front End
+    buttonNext.onclick = function() {
+      getNextImage();
+    };
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+
+
