@@ -190,45 +190,83 @@ import {
 
 // app.js code insert
 
-
+// const Math = require("mathjs");
 // const fetch = require("node-fetch")
 // const axios = require('axios');
 // const Papa = require('papaparse');
 
 // Define HTML elements
 const buttonNext = document.getElementById("btnNext");
+const buttonLike = document.getElementById("btnLike");
+const buttonDislike = document.getElementById("btnDislike");
+
 const img = document.getElementById('img');
+const imgTitle = document.getElementById('imgTitle');
+const imgParagraph = document.getElementById('imgParagraph');
 var imageList = [];
 
 async function getImageList() {
-  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?images_exist=1");
+  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
   const jsonData = await response.json();
-  // console.log(jsonData);
-  var buildList = [];
-  jsonData.records.forEach((record) => {
-    // console.log(record["_primaryImageId"]);
-    buildList.push("https://framemark.vam.ac.uk/collections/" + record["_primaryImageId"] + "/full/!500,500/0/default.jpg");
-  });
-  return buildList;
+  console.log(jsonData);
+  return jsonData;
 }
 getImageList()
   .then((imageList) => {
     // Set initial image 
-    img.src = imageList[0];
+    img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[0]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+    imgTitle.innerHTML = imageList.records[0]["objectType"];
+    imgParagraph.innerHTML = imageList.records[0]["_primaryTitle"];
     // Set initial image index
     let currentIndex = 0;
 
     // Function to iterate through images
     function getNextImage() {
       // Increment the index and handle wrap-around
-      currentIndex = (currentIndex + 1) % imageList.length;
+      currentIndex = (currentIndex + 1) % imageList.records.length;
       // Set the src attribute to the next image in the list
-      img.src = imageList[currentIndex];
+      img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[currentIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+      // Set the title attribute to the next image in the list
+      imgTitle.innerHTML = imageList.records[currentIndex]["objectType"];
+      // Set the description attribute to the next image in the list
+      imgParagraph.innerHTML = imageList.records[currentIndex]["_primaryTitle"];
     }
+
+    function getRandomImg() {
+      // Remember img what have been shown
+      let shownImg = [];
+      // Get random number
+      let randomIndex = Math.floor(Math.random() * imageList.records.length);
+      // Get img that have not been used in shownImg
+      while (shownImg.includes(randomIndex)) {
+        randomIndex = Math.floor(Math.random() * imageList.records.length);
+      }
+      // Add img to shownImg
+      shownImg.push(randomIndex);
+
+      // Set the src attribute to the next image in the list
+      img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+      // Set the title attribute to the next image in the list
+      imgTitle.innerHTML = imageList.records[randomIndex]["objectType"];
+      // Set the description attribute to the next image in the list
+      imgParagraph.innerHTML = imageList.records[randomIndex]["_primaryTitle"];
+    }
+
+    // Function to store liked images
+    function storeLike() {
+      
+    }
+
 
     // Define actions on Front End
     buttonNext.onclick = function() {
-      getNextImage();
+      getRandomImg();
+    };
+    buttonLike.onclick = function() {
+      storeLike();
+    };
+    buttonDislike.onclick = function() {
+      storeDislike();
     };
   })
   .catch((error) => {
