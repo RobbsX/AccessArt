@@ -6,5 +6,4 @@ ToDo:
 - play around with the API to get more than 14 pictures.
 -   DONE.
 - Optional: Figure out how to make a "Feed" like in Insta.  
-- Make function to button (dis)like click. Save img data and (Dis)Like to Users Pod. 
-- 
+- Make function to button (dis)like click. Save img data and (Dis)Like to Users Pod.  
