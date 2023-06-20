@@ -56,3 +56,24 @@ dt {
 dd {
   grid-column-start: 2;
 }
+
+/* This is a single-line comment */
+ 
+button{
+cursor: pointer;
+outline: 0;
+color: #AAA;
+
+}
+
+.btn:focus {
+outline: none;
+}
+
+.green{
+color: green;
+}
+
+.red{
+color: red;
+}

@@ -206,7 +206,7 @@ const imgParagraph = document.getElementById('imgParagraph');
 var imageList = [];
 
 async function getImageList() {
-  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
+  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=40&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
   const jsonData = await response.json();
   console.log(jsonData);
   return jsonData;
@@ -272,6 +272,28 @@ getImageList()
   .catch((error) => {
     console.log(error);
   });
+  
+// Copy pasted Like-Dislike from https://codepen.io/MirzaLeka/pen/BvGMVP
+// does not yet work correctly 
 
-
+  var btn1 = document.querySelector('#green');
+  var btn2 = document.querySelector('#red');
+  
+  btn1.addEventListener('click', function() {
+    
+      if (btn2.classList.contains('red')) {
+        btn2.classList.remove('red');
+      } 
+    this.classList.toggle('green');
+    
+  });
+  
+  btn2.addEventListener('click', function() {
+    
+      if (btn1.classList.contains('green')) {
+        btn1.classList.remove('green');
+      } 
+    this.classList.toggle('red');
+    
+  });
 
