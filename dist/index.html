@@ -19,9 +19,11 @@
     <div class="row">
       <label id="labelIdP" for="select-idp">1. Select your Identity Provider: </label>
       <select id="select-idp" name="select-idp">
-        <option value="">--Please select an Identity Provider (IdP)--</option>
+        
         <!-- Update the select-idp option if not using PodSpaces -->
         <option value="https://login.inrupt.com">https://login.inrupt.com (PodSpaces)</option>
+        <!-- Too Annoying to always select the right PodSpace-->
+        <option value="">--Please select an Identity Provider (IdP)--</option>
 
       </select>
       <button name="btnLogin" id="btnLogin">Login</button>
@@ -89,20 +91,24 @@ RDF 1.1 Primer</textarea>
       <div class="col-sm-6">
         <img id="img" src="" alt="Image" class="img-responsive" style="height:100%"/>
       </div>
-      <div class="col-sm-6">
-        <p id="imgParagraph"></p>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
+        <p class="text-center align-middle" id="imgParagraph"></p>
       </div>
+      <div class="col-sm-1"></div>
     </div>
     <!-- Button Row -->
     <div class="row"> 
       <div class="col-sm-6">
         <button type="buttonNext" id="btnNext" class="btn btn-primary btn-block">Next</button>  
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
         <div class="btn-group btn-group-justified">
           <a id="btnDislike" href="#" class="btn btn-danger glyphicon glyphicon-thumbs-down"></a>
           <a id="btnLike" href="#" class="btn btn-success glyphicon glyphicon-thumbs-up"></a>
         </div>
+      <div class="col-sm-1"></div>
       </div>
     </div>
   </div>
@@ -110,9 +116,12 @@ RDF 1.1 Primer</textarea>
 
   
 
-  <table id="csv-data"></table>
-
-
+  <div> 
+    <h3>Read mySeenList</h3>
+    <button name="btnDeleteSeenList" id="btnDeleteSeenList">Delete mySeenList</button>
+    <p id="labelmySeenList"></p>
+  </div>
+  
 </body>
 
 </html>
