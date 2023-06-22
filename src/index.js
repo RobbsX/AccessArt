@@ -17,6 +17,7 @@ import {
   getSolidDataset,
   getThingAll,
   getStringNoLocale,
+  getStringNoLocaleAll,
   removeThing,
   saveSolidDatasetAt,
   setThing,
@@ -170,6 +171,14 @@ async function createList() {
 }
 
 
+
+
+
+
+
+
+
+
 async function checkAuthentication() {
   try {
     const session = await fetch('session');
@@ -177,9 +186,11 @@ async function checkAuthentication() {
       // User is signed in
       console.log('User is signed in');
       console.log('WebID: ', session.webId);
+      return true;
     } else {
       // User is not signed in
       console.log('User is not signed in');
+      return false;
     }
   } catch (error) {
     console.error('Error checking authentication:', error);
@@ -187,7 +198,34 @@ async function checkAuthentication() {
 }
 // checkAuthentication();
 
+// Read the Seen List
+async function getSeenList() {
+  // Return mySeenList if exists, else return empty json
+  let listcontent = "";
+  let items;
+  let json_output = [];
+  try {
+    const SELECTED_POD = document.getElementById("select-pod").value;
+    const readingListUrl = `${SELECTED_POD}getting-started/readingList/mySeenList`;
+    const savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+    items = getThingAll(savedReadingList);
+    for (let i = 0; i < items.length; i++) {
+      let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
+      if (item !== null) {
+        listcontent += item + "\n";
+        json_output[i] = JSON.parse(item);
+      }
+    }
+    
+    // catch error 404
+  } catch (error) {
+    console.log(error);
+  }
+  return [listcontent, json_output];
+}
 
+
+// Add to the Seen List
 async function addToSeen(record) {
   const SELECTED_POD = document.getElementById("select-pod").value;
 
@@ -209,10 +247,6 @@ async function addToSeen(record) {
     if (typeof error.statusCode === "number" && error.statusCode === 404) {
       // if not found, create a new SolidDataset (i.e., the reading list)
       myReadingList = createSolidDataset();
-      // myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
-      // if (myReadingList !== null) {
-      //   console.log("Dataset loaded.");
-      // }
       console.log("Dataset created.");
     } else {
       console.log("No Dataset loaded.");
@@ -220,26 +254,12 @@ async function addToSeen(record) {
     }
   }
 
-  // Add record seen to the Dataset when 
-  let recordInput;
-  console.log(getThingAll(myReadingList));
-  if (getThingAll(myReadingList) === 0) {
-      console.log("Thing doesn't Exist.");
-      recordInput = createThing({ name: "SeenList" });  // systemNumber: record["systemNumber"]
-      recordInput = addUrl(recordInput, RDF.type, AS.Article);
-      recordInput = addStringNoLocale(recordInput, SCHEMA_INRUPT.name, JSON.stringify(record, null));
-      myReadingList = setThing(myReadingList, recordInput);
-    } else {
-      console.log("Thing Exists.");
-      let oldRecord = getThingAll(myReadingList);
-      console.log(oldRecord);
-      console.log(JSON.stringify(oldRecord));
-      recordInput = createThing({ name: "SeenListUpdate" });  // systemNumber: record["systemNumber"]
-      recordInput = addUrl(recordInput, RDF.type, AS.Article);
-      recordInput = addStringNoLocale(recordInput, SCHEMA_INRUPT.name, JSON.stringify(record).replaceAll("\\", "") + JSON.stringify(oldRecord).replaceAll("\\", ""));
-      myReadingList = setThing(myReadingList, recordInput);
-    }
-  
+  // Add record seen to the Solid Dataset, by creating a new Thing
+  let recordInput = createThing({ name: "SeenList" + getThingAll(myReadingList).length });  // systemNumber: record["systemNumber"]
+  recordInput = addUrl(recordInput, RDF.type, AS.Article);
+  recordInput = addStringNoLocale(recordInput, SCHEMA_INRUPT.name, JSON.stringify(record, null));
+  myReadingList = setThing(myReadingList, recordInput);
+
 
   try {
     // Save the SolidDataset
@@ -248,21 +268,9 @@ async function addToSeen(record) {
       myReadingList,
       { fetch: fetch }
     );
-
-    // Refetch the Reading List
-    savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
-
-    let items = getThingAll(savedReadingList);
-
-    let listcontent = "";
-    for (let i = 0; i < items.length; i++) {
-      let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
-      if (item !== null) {
-        listcontent += item + "\n";
-      }
-    }
+    // Display the updated list
+    let [listcontent, items] = await getSeenList();
     document.getElementById("labelmySeenList").textContent = listcontent;
-
   } catch (error) {
     console.log("addToSeen Error");
     console.log(error);
@@ -305,19 +313,62 @@ buttonCreate.onclick = function () {
   }
 
 
-// app.js code insert
 
+  
 // Define HTML elements
 const buttonNext = document.getElementById("btnNext");
 const buttonLike = document.getElementById("btnLike");
 const buttonDislike = document.getElementById("btnDislike");
 const labelmySeenList = document.getElementById("labelmySeenList");
 const buttonDeleteSeenList = document.getElementById("btnDeleteSeenList");
-
 const img = document.getElementById('img');
 const imgTitle = document.getElementById('imgTitle');
 const imgParagraph = document.getElementById('imgParagraph');
 var imageList = [];
+
+async function getImage() {
+  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
+  const jsonData = await response.json();
+  console.log("V&A API:");
+  console.log(jsonData.records);
+
+  // Get mySeenList if exists
+  let [listcontent, items] = await getSeenList();
+  console.log("My Seen List:"); 
+  console.log(items);
+  
+  // Reduced List
+  let reducedList = [];
+
+  // Reduce: List - mySeenList
+  
+
+  // let records = jsonData.records;
+  // let mySeenList = listcontent.split("\n");
+  // let filteredRecords = records.filter(function (el) {
+  //   return !mySeenList.includes(el.systemNumber);
+  // });
+  // jsonData.records = filteredRecords;
+  // console.log("filteredRecords");
+  // console.log(filteredRecords);
+  // console.log("jsonData");
+  // console.log(jsonData.records); 
+
+  // Choose random image
+  let randomIndex = Math.floor(Math.random() * jsonData.records.length);
+  img.src = "https://framemark.vam.ac.uk/collections/" + jsonData.records[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+  imgTitle.innerHTML = jsonData.records[randomIndex]["objectType"];
+  imgParagraph.innerHTML = jsonData.records[randomIndex]["_primaryTitle"];
+
+
+  return jsonData;
+}
+getImage();
+
+
+
+
+
 
 async function getImageList() {
   const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
@@ -325,7 +376,6 @@ async function getImageList() {
   console.log(jsonData);
   return jsonData;
 }
-
 // Somehow main function
 getImageList()
   // .then(() => {
@@ -338,21 +388,6 @@ getImageList()
     imgParagraph.innerHTML = imageList.records[0]["_primaryTitle"];    
     // addToSeen(imageList.records[0]);
 
-    // Set initial image index
-    let currentIndex = 0;
-
-    // Function to iterate through images
-    function getNextImage() {
-      // Increment the index and handle wrap-around
-      currentIndex = (currentIndex + 1) % imageList.records.length;
-      // Set the src attribute to the next image in the list
-      img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[currentIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
-      // Set the title attribute to the next image in the list
-      imgTitle.innerHTML = imageList.records[currentIndex]["objectType"];
-      // Set the description attribute to the next image in the list
-      imgParagraph.innerHTML = imageList.records[currentIndex]["_primaryTitle"];
-    }
-
     function getRandomImg() {
       // Remember img what have been shown
       let shownImg = [];
@@ -364,14 +399,14 @@ getImageList()
       }
       // Add img to shownImg
       shownImg.push(randomIndex);
-
+    
       // Set the src attribute to the next image in the list
       img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
       // Set the title attribute to the next image in the list
       imgTitle.innerHTML = imageList.records[randomIndex]["objectType"];
       // Set the description attribute to the next image in the list
       imgParagraph.innerHTML = imageList.records[randomIndex]["_primaryTitle"];
-
+    
       addToSeen(imageList.records[randomIndex]);
     }
 
