@@ -178,7 +178,6 @@ async function createList() {
 
 
 
-
 async function checkAuthentication() {
   try {
     const session = await fetch('session');
@@ -198,45 +197,11 @@ async function checkAuthentication() {
 }
 // checkAuthentication();
 
-// Read the Seen List
-async function getSeenList() {
-  // Return mySeenList if exists, else return empty json
-  let listcontent = "";
-  let items;
-  let json_output = [];
-  try {
-    const SELECTED_POD = document.getElementById("select-pod").value;
-    const readingListUrl = `${SELECTED_POD}getting-started/readingList/mySeenList`;
-    const savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
-    items = getThingAll(savedReadingList);
-    for (let i = 0; i < items.length; i++) {
-      let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
-      if (item !== null) {
-        listcontent += item + "\n";
-        json_output[i] = JSON.parse(item);
-      }
-    }
-    
-    // catch error 404
-  } catch (error) {
-    console.log(error);
-  }
-  return [listcontent, json_output];
-}
-
-
-// Add to the Seen List
-async function addToSeen(record) {
+// get POD List 
+async function getPodList() {
   const SELECTED_POD = document.getElementById("select-pod").value;
-
-  // For simplicity and brevity, this tutorial hardcodes the  SolidDataset URL.
-  // In practice, you should add in your profile a link to this resource
-  // such that applications can follow to find your list.
   const readingListUrl = `${SELECTED_POD}getting-started/readingList/mySeenList`;
-
-  // Fetch or create a new reading list.
   let myReadingList;
-
   try {
     // Attempt to retrieve the reading list in case it already exists.
     myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
@@ -253,6 +218,66 @@ async function addToSeen(record) {
       console.error(error.message);
     }
   }
+  return [readingListUrl, myReadingList];
+}
+
+// Read the Seen List
+async function getSeenList() {
+  // Return mySeenList if exists, else return empty json
+  let listcontent = "";
+  let items;
+  let json_output = [];
+  try {
+    let [readingListUrl, myReadingList] = await getPodList();
+    items = getThingAll(myReadingList);
+    for (let i = 0; i < items.length; i++) {
+      let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
+      if (item !== null) {
+        listcontent += item + "\n";
+        json_output[i] = JSON.parse(item);
+      }
+    }
+    // console.log("listcontent: " + listcontent);
+    // console.log(json_output);
+    
+    // catch error 404
+  } catch (error) {
+    console.log("Error processing POD list.");
+    console.log(error);
+  }
+  return [listcontent, json_output];
+}
+
+
+// Add to the Seen List
+async function addToSeen(record) {
+  const SELECTED_POD = document.getElementById("select-pod").value;
+
+  // For simplicity and brevity, this tutorial hardcodes the  SolidDataset URL.
+  // In practice, you should add in your profile a link to this resource
+  // such that applications can follow to find your list.
+  // const readingListUrl = `${SELECTED_POD}getting-started/readingList/mySeenList`;
+
+  // // Fetch or create a new reading list.
+  // let myReadingList;
+
+  // try {
+  //   // Attempt to retrieve the reading list in case it already exists.
+  //   myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+  //   if (myReadingList !== null) {
+  //     console.log("Dataset loaded.");
+  //   }
+  // } catch (error) {
+  //   if (typeof error.statusCode === "number" && error.statusCode === 404) {
+  //     // if not found, create a new SolidDataset (i.e., the reading list)
+  //     myReadingList = createSolidDataset();
+  //     console.log("Dataset created.");
+  //   } else {
+  //     console.log("No Dataset loaded.");
+  //     console.error(error.message);
+  //   }
+  // }
+  let [readingListUrl, myReadingList] = await getPodList();
 
   // Add record seen to the Solid Dataset, by creating a new Thing
   let recordInput = createThing({ name: "SeenList" + getThingAll(myReadingList).length });  // systemNumber: record["systemNumber"]
@@ -326,8 +351,10 @@ const imgTitle = document.getElementById('imgTitle');
 const imgParagraph = document.getElementById('imgParagraph');
 var imageList = [];
 
-async function getImage() {
-  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
+
+async function getImageListNotSeen() {
+  // Output: imageListNotSeen - list of JSON objects 
+  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); 
   const jsonData = await response.json();
   console.log("V&A API:");
   console.log(jsonData.records);
@@ -338,115 +365,172 @@ async function getImage() {
   console.log(items);
   
   // Reduced List
-  let reducedList = [];
+  let imageListNotSeen = [];
 
   // Reduce: List - mySeenList
-  
-
-  // let records = jsonData.records;
-  // let mySeenList = listcontent.split("\n");
-  // let filteredRecords = records.filter(function (el) {
-  //   return !mySeenList.includes(el.systemNumber);
-  // });
-  // jsonData.records = filteredRecords;
-  // console.log("filteredRecords");
-  // console.log(filteredRecords);
-  // console.log("jsonData");
-  // console.log(jsonData.records); 
-
-  // Choose random image
-  let randomIndex = Math.floor(Math.random() * jsonData.records.length);
-  img.src = "https://framemark.vam.ac.uk/collections/" + jsonData.records[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
-  imgTitle.innerHTML = jsonData.records[randomIndex]["objectType"];
-  imgParagraph.innerHTML = jsonData.records[randomIndex]["_primaryTitle"];
-
-
-  return jsonData;
+  let items_list = [];
+  // create list of systemNumbers
+  for (let i = 0; i < items.length; i++) {
+    items_list.push(items[i]["systemNumber"]);
+  }
+  // reduce jsonData.records
+  for (let i = 0; i < jsonData.records.length; i++) {
+    try {
+      if (!items_list.includes(jsonData.records[i]["systemNumber"])) {
+        imageListNotSeen.push(jsonData.records[i]);
+      } else if (items_list.length == jsonData.records.length) {
+        console.log("Already seen every image. Delete mySeenList to start over.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return imageListNotSeen;
 }
-getImage();
 
+async function displayImage(image) {
+  // Input: image as JSON object 
+  // Output: None
+  console.log("displayImage"); 
+  console.log(image);
+  img.src = "https://framemark.vam.ac.uk/collections/" + image["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+  // Set the title attribute to the next image in the list
+  imgTitle.innerHTML = image["objectType"];
+  // Set the description attribute to the next image in the list
+  imgParagraph.innerHTML = image["_primaryTitle"];
 
-
-
-
-
-async function getImageList() {
-  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
-  const jsonData = await response.json();
-  console.log(jsonData);
-  return jsonData;
+  addToSeen(image);
 }
+
+function deleteSeenList() {
+  try {
+    const SELECTED_POD = document.getElementById("select-pod").value;
+    const url = `${SELECTED_POD}getting-started/readingList/mySeenList`;
+    deleteSolidDataset(
+      url, { fetch: fetch } // fetch function from authenticated session
+    );
+  } catch (error) {
+    console.log("deleteSeenList Error: " + error);
+  }
+}
+
+async function getImage() {
+  // Input: None
+  // Output: None
+  let imageListNotSeen = await getImageListNotSeen();
+  displayImage(imageListNotSeen[0]);
+  addToSeen(imageListNotSeen[0]);
+}
+
+
+
+
+
+
+// async function getImageList() {
+//   const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); // https://api.vam.ac.uk/v2/objects/search?images_exist=1 
+//   const jsonData = await response.json();
+//   console.log(jsonData);
+//   let imageList = jsonData.records;
+//   return imageList;
+// }
+
+
 // Somehow main function
-getImageList()
-  // .then(() => {
-  //   checkAuthentication() == true
-  // })
-  .then((imageList) => {
-    // Set initial image 
-    img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[0]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
-    imgTitle.innerHTML = imageList.records[0]["objectType"];
-    imgParagraph.innerHTML = imageList.records[0]["_primaryTitle"];    
-    // addToSeen(imageList.records[0]);
+// getImageListNotSeen()
+//   // .then(() => {
+//   //   checkAuthentication() == true
+//   // })
+//   .then((imageList) => {
+//     // Set initial image 
+//     img.src = "https://framemark.vam.ac.uk/collections/" + imageList[0]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+//     imgTitle.innerHTML = imageList[0]["objectType"];
+//     imgParagraph.innerHTML = imageList[0]["_primaryTitle"];    
+//     // addToSeen(imageList.records[0]);
 
-    function getRandomImg() {
-      // Remember img what have been shown
-      let shownImg = [];
-      // Get random number
-      let randomIndex = Math.floor(Math.random() * imageList.records.length);
-      // Get img that have not been used in shownImg
-      while (shownImg.includes(randomIndex)) {
-        randomIndex = Math.floor(Math.random() * imageList.records.length);
-      }
-      // Add img to shownImg
-      shownImg.push(randomIndex);
+//     function getRandomImg() {
+//       // Remember img what have been shown
+//       let shownImg = [];
+//       // Get random number
+//       let randomIndex = Math.floor(Math.random() * imageList.length);
+//       // Get img that have not been used in shownImg
+//       while (shownImg.includes(randomIndex)) {
+//         randomIndex = Math.floor(Math.random() * imageList.length);
+//       }
+//       // Add img to shownImg
+//       shownImg.push(randomIndex);
     
-      // Set the src attribute to the next image in the list
-      img.src = "https://framemark.vam.ac.uk/collections/" + imageList.records[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
-      // Set the title attribute to the next image in the list
-      imgTitle.innerHTML = imageList.records[randomIndex]["objectType"];
-      // Set the description attribute to the next image in the list
-      imgParagraph.innerHTML = imageList.records[randomIndex]["_primaryTitle"];
+//       // Set the src attribute to the next image in the list
+//       img.src = "https://framemark.vam.ac.uk/collections/" + imageList[randomIndex]["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+//       // Set the title attribute to the next image in the list
+//       imgTitle.innerHTML = imageList[randomIndex]["objectType"];
+//       // Set the description attribute to the next image in the list
+//       imgParagraph.innerHTML = imageList[randomIndex]["_primaryTitle"];
     
-      addToSeen(imageList.records[randomIndex]);
-    }
+//       addToSeen(imageList[randomIndex]);
+//     }
 
-    // Function to store liked images
-    function storeLike() {
+//     // Function to store liked images
+//     function storeLike() {
       
-    }
+//     }
 
-    function deleteSeenList() {
-      try {
-        const SELECTED_POD = document.getElementById("select-pod").value;
-        const url = `${SELECTED_POD}getting-started/readingList/mySeenList`;
-        deleteSolidDataset(
-          url, { fetch: fetch } // fetch function from authenticated session
-        );
-      } catch (error) {
-        console.log("deleteSeenList Error: " + error);
-      }
-    }
-
-
-    // Define actions on Front End
-    buttonNext.onclick = function() {
-      getRandomImg();
-    };
-    buttonLike.onclick = function() {
-      storeLike();
-    };
-    buttonDislike.onclick = function() {
-      storeDislike();
-    };
-
-    buttonDeleteSeenList.onclick = function() {
-      deleteSeenList();
-    }
-
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+//     function deleteSeenList() {
+//       try {
+//         const SELECTED_POD = document.getElementById("select-pod").value;
+//         const url = `${SELECTED_POD}getting-started/readingList/mySeenList`;
+//         deleteSolidDataset(
+//           url, { fetch: fetch } // fetch function from authenticated session
+//         );
+//       } catch (error) {
+//         console.log("deleteSeenList Error: " + error);
+//       }
+//     }
 
 
+//     // Define actions on Front End
+//     buttonNext.onclick = function() {
+//       getRandomImg();
+//     };
+//     buttonLike.onclick = function() {
+//       storeLike();
+//     };
+//     buttonDislike.onclick = function() {
+//       storeDislike();
+//     };
+
+//     buttonDeleteSeenList.onclick = function() {
+//       deleteSeenList();
+//     }
+
+    
+
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+
+
+
+  // Define actions on Front End
+  buttonNext.onclick = function() {
+    // getRandomImg();
+    getImage();
+  };
+  buttonLike.onclick = function() {
+    storeLike();
+  };
+  buttonDislike.onclick = function() {
+    storeDislike();
+  };
+
+  buttonDeleteSeenList.onclick = function() {
+    deleteSeenList();
+  }
+
+
+
+  window.onload = function() {
+    getImage();
+  }
 
