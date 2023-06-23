@@ -19,6 +19,7 @@
     "axios": "^1.4.0",
     "node-fetch": "^3.3.1",
     "papaparse": "^5.4.1",
+    "solid-comment": "^0.9.2",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
