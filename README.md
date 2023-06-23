@@ -13,7 +13,7 @@ These days, apps use a centralised data storage. This enables ~97% Uptime​, ef
 - Data Leaks (massive expenses for companies)
 - Legal Issues (GDPR)
 
-However, users could also store their data themselves. The founder of the web, Sir Tim Berners-Lee, founded the {SOLID project}(https://solidproject.org) that enables users to have control over their data by storing it on their own POD. This pod can be your own server, or you use a trusted third-party. 
+However, users could also store their data themselves. The founder of the web, Sir Tim Berners-Lee, founded the [SOLID project](https://solidproject.org) that enables users to have control over their data by storing it on their own POD. This pod can be your own server, or you use a trusted third-party. 
 
 Sounds interesting? Right! But how does the developer site look like? That's what we try to figure out!
 
