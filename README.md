@@ -32,6 +32,8 @@ Framework
 
 ## What did we encounter? 
 
+Some issues with linked data on apps using RDF is written on articles such as [this] (https://ontola.io/blog/full-stack-linked-data), where especially no ready solution is available to overcome the slowness that comes with loading all URL/URIs of the ressources in the background. 
+
 ### Storing and Getting Data from POD
 CRUD. 
 Create: createThing 
