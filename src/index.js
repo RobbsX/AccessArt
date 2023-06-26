@@ -24,6 +24,9 @@ import {
   deleteSolidDataset
 } from "@inrupt/solid-client";
 
+// const SolidComment = require("solid-comment")
+import SolidComment from "solid-comment"
+
 import { SCHEMA_INRUPT, RDF, AS } from "@inrupt/vocab-common-rdf";
 
 const selectorIdP = document.querySelector("#select-idp");
