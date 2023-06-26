@@ -96,79 +96,79 @@ async function getMyPods() {
 }
 
 // 3. Create the Reading List
-async function createList() {
-  labelCreateStatus.textContent = "";
-  const SELECTED_POD = document.getElementById("select-pod").value;
+// async function createList() {
+//   labelCreateStatus.textContent = "";
+//   const SELECTED_POD = document.getElementById("select-pod").value;
 
-  // For simplicity and brevity, this tutorial hardcodes the  SolidDataset URL.
-  // In practice, you should add in your profile a link to this resource
-  // such that applications can follow to find your list.
-  const readingListUrl = `${SELECTED_POD}getting-started/readingList/myList`;
+//   // For simplicity and brevity, this tutorial hardcodes the  SolidDataset URL.
+//   // In practice, you should add in your profile a link to this resource
+//   // such that applications can follow to find your list.
+//   const readingListUrl = `${SELECTED_POD}getting-started/readingList/myList`;
 
-  let titles = document.getElementById("titles").value.split("\n");
+//   let titles = document.getElementById("titles").value.split("\n");
 
-  // Fetch or create a new reading list.
-  let myReadingList;
+//   // Fetch or create a new reading list.
+//   let myReadingList;
 
-  try {
-    // Attempt to retrieve the reading list in case it already exists.
-    myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
-    // Clear the list to override the whole list
-    let items = getThingAll(myReadingList);
-    items.forEach((item) => {
-      myReadingList = removeThing(myReadingList, item);
-    });
-  } catch (error) {
-    if (typeof error.statusCode === "number" && error.statusCode === 404) {
-      // if not found, create a new SolidDataset (i.e., the reading list)
-      myReadingList = createSolidDataset();
-    } else {
-      console.error(error.message);
-    }
-  }
+//   try {
+//     // Attempt to retrieve the reading list in case it already exists.
+//     myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+//     // Clear the list to override the whole list
+//     let items = getThingAll(myReadingList);
+//     items.forEach((item) => {
+//       myReadingList = removeThing(myReadingList, item);
+//     });
+//   } catch (error) {
+//     if (typeof error.statusCode === "number" && error.statusCode === 404) {
+//       // if not found, create a new SolidDataset (i.e., the reading list)
+//       myReadingList = createSolidDataset();
+//     } else {
+//       console.error(error.message);
+//     }
+//   }
 
-  // Add titles to the Dataset
-  let i = 0;
-  titles.forEach((title) => {
-    if (title.trim() !== "") {
-      let item = createThing({ name: "title" + i });
-      item = addUrl(item, RDF.type, AS.Article);
-      item = addStringNoLocale(item, SCHEMA_INRUPT.name, title);
-      myReadingList = setThing(myReadingList, item);
-      i++;
-    }
-  });
+//   // Add titles to the Dataset
+//   let i = 0;
+//   titles.forEach((title) => {
+//     if (title.trim() !== "") {
+//       let item = createThing({ name: "title" + i });
+//       item = addUrl(item, RDF.type, AS.Article);
+//       item = addStringNoLocale(item, SCHEMA_INRUPT.name, title);
+//       myReadingList = setThing(myReadingList, item);
+//       i++;
+//     }
+//   });
 
-  try {
-    // Save the SolidDataset
-    let savedReadingList = await saveSolidDatasetAt(
-      readingListUrl,
-      myReadingList,
-      { fetch: fetch }
-    );
+//   try {
+//     // Save the SolidDataset
+//     let savedReadingList = await saveSolidDatasetAt(
+//       readingListUrl,
+//       myReadingList,
+//       { fetch: fetch }
+//     );
 
-    labelCreateStatus.textContent = "Saved";
+//     labelCreateStatus.textContent = "Saved";
 
-    // Refetch the Reading List
-    savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+//     // Refetch the Reading List
+//     savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
 
-    let items = getThingAll(savedReadingList);
+//     let items = getThingAll(savedReadingList);
 
-    let listcontent = "";
-    for (let i = 0; i < items.length; i++) {
-      let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
-      if (item !== null) {
-        listcontent += item + "\n";
-      }
-    }
+//     let listcontent = "";
+//     for (let i = 0; i < items.length; i++) {
+//       let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
+//       if (item !== null) {
+//         listcontent += item + "\n";
+//       }
+//     }
 
-    document.getElementById("savedtitles").value = listcontent;
-  } catch (error) {
-    console.log(error);
-    labelCreateStatus.textContent = "Error" + error;
-    labelCreateStatus.setAttribute("role", "alert");
-  }
-}
+//     document.getElementById("savedtitles").value = listcontent;
+//   } catch (error) {
+//     console.log(error);
+//     labelCreateStatus.textContent = "Error" + error;
+//     labelCreateStatus.setAttribute("role", "alert");
+//   }
+// }
 
 
 
@@ -237,10 +237,6 @@ async function getSeenList() {
         json_output[i] = JSON.parse(item);
       }
     }
-    // console.log("listcontent: " + listcontent);
-    // console.log(json_output);
-    
-    // catch error 404
   } catch (error) {
     console.log("Error processing POD list.");
     console.log(error);
@@ -297,15 +293,22 @@ async function addToSeen(record) {
     let [listcontent, items] = await getSeenList();
     document.getElementById("labelmySeenList").textContent = listcontent;
   } catch (error) {
-    console.log("addToSeen Error");
-    console.log(error);
-    labelCreateStatus.textContent = "Error" + error;
-    labelCreateStatus.setAttribute("role", "alert");
+    if (typeof error.statusCode === "number" && error.statusCode === 404) {
+      console.log("Error in finding POD.");
+      console.log(error);
+      labelCreateStatus.textContent = "Please Log In!";
+      labelCreateStatus.setAttribute("role", "alert");
+    } else {
+      console.log("Error." + error);
+      console.log(error);
+      labelCreateStatus.textContent = "Error";
+      labelCreateStatus.setAttribute("role", "alert");
+    }
   }
 }
 
-buttonLogin.onclick = function () {
-  loginToSelectedIdP();
+buttonLogin.onclick = async function () {
+  await loginToSelectedIdP();  // Made async to wait for login to complete
 };
 
 buttonRead.onclick = function () {
@@ -354,15 +357,23 @@ var imageList = [];
 
 async function getImageListNotSeen() {
   // Output: imageListNotSeen - list of JSON objects 
-  const response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=3&images_exist=1"); 
-  const jsonData = await response.json();
-  console.log("V&A API:");
-  console.log(jsonData.records);
+  let jsonData;
+  let response;
+  try {
+    // Get V&A API
+    response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=4&images_exist=1"); 
+    jsonData = await response.json();
+  } catch (error) {
+    console.log("Error processing V&A API.");
+    console.log(error);
+  }
+  // console.log("V&A API:");
+  // console.log(jsonData.records);
 
   // Get mySeenList if exists
   let [listcontent, items] = await getSeenList();
-  console.log("My Seen List:"); 
-  console.log(items);
+  // console.log("My Seen List:"); 
+  // console.log(items);
   
   // Reduced List
   let imageListNotSeen = [];
@@ -377,8 +388,15 @@ async function getImageListNotSeen() {
   for (let i = 0; i < jsonData.records.length; i++) {
     try {
       if (!items_list.includes(jsonData.records[i]["systemNumber"])) {
-        imageListNotSeen.push(jsonData.records[i]);
+        if (true) {
+          const newLoad = await fetch("https://api.vam.ac.uk/v2/museumobject/" + jsonData.records[i]["systemNumber"]);
+          const newJsonData = await newLoad.json();
+          imageListNotSeen.push(newJsonData["record"]);
+        } else {
+          imageListNotSeen.push(jsonData.records[i]);
+        }
       } else if (items_list.length == jsonData.records.length) {
+        console.log(items_list + jsonData.records)
         console.log("Already seen every image. Delete mySeenList to start over.");
       }
     } catch (error) {
@@ -393,11 +411,37 @@ async function displayImage(image) {
   // Output: None
   console.log("displayImage"); 
   console.log(image);
-  img.src = "https://framemark.vam.ac.uk/collections/" + image["_primaryImageId"] + "/full/!500,500/0/default.jpg";
-  // Set the title attribute to the next image in the list
-  imgTitle.innerHTML = image["objectType"];
-  // Set the description attribute to the next image in the list
-  imgParagraph.innerHTML = image["_primaryTitle"];
+  try {
+    if (true) {
+      img.src = "https://framemark.vam.ac.uk/collections/" + image["images"][0] + "/full/!500,500/0/default.jpg";
+      // Set the title attribute to the next image in the list
+      if ( image["titles"] == [] || image["titles"].length === 0) {
+        imgTitle.innerHTML = "No Title";
+      } else {
+        imgTitle.innerHTML = image["titles"][0]["title"];
+      }
+      // Set the description attribute to the next image in the list
+      if (image["summaryDescription"] === "" || image["summaryDescription"].length === 0) {
+        imgParagraph.innerHTML = "No Description";
+      } else {
+        imgParagraph.innerHTML = image["summaryDescription"];
+      }
+      // ERROR somewhere here
+    } else { 
+      img.src = "https://framemark.vam.ac.uk/collections/" + image["_primaryImageId"] + "/full/!500,500/0/default.jpg";
+      // Set the title attribute to the next image in the list
+      imgTitle.innerHTML = image["objectType"];
+      // Set the description attribute to the next image in the list
+      imgParagraph.innerHTML = image["_primaryTitle"];
+    }
+  } catch (error) {
+    // catch error undefined is not an object 
+    // if (error instanceof TypeError) {
+    //   imgParagraph.innerHTML = "Already seen every image. Delete mySeenList to start over.";
+    // }
+    console.log(error);
+  }
+  
 
   addToSeen(image);
 }
