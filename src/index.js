@@ -65,7 +65,7 @@ async function handleRedirectAfterLogin() {
     buttonRead.removeAttribute("disabled");
 
     // Get Pod URL(s) associated with the WebID
-    getMyPods();
+    await getMyPods();
   }
 }
 
@@ -429,6 +429,7 @@ async function displayImage(image) {
       } else {
         imgParagraph.innerHTML = image["summaryDescription"];
       }
+      addToSeen(image);
       // ERROR somewhere here
     } else { 
       img.src = "https://framemark.vam.ac.uk/collections/" + image["_primaryImageId"] + "/full/!500,500/0/default.jpg";
@@ -444,9 +445,6 @@ async function displayImage(image) {
     // }
     console.log(error);
   }
-  
-
-  addToSeen(image);
 }
 
 function deleteSeenList() {
@@ -465,8 +463,12 @@ async function getImage() {
   // Input: None
   // Output: None
   let imageListNotSeen = await getImageListNotSeen();
-  displayImage(imageListNotSeen[0]);
-  addToSeen(imageListNotSeen[0]);
+  if (imageListNotSeen.length == 0) {
+    imgParagraph.innerHTML = "Already seen every image. Delete mySeenList to start over.";
+  } else {
+    displayImage(imageListNotSeen[0]);
+    addToSeen(imageListNotSeen[0]);
+  }
 }
 
 
