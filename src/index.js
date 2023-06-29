@@ -480,7 +480,11 @@ async function getImage() {
   }
 }
 
-
+async function storeLike() {
+  // Input: None
+  // Output: None
+  labelCreateStatus.innerHTML = "Like not stored. Why? Becuase we didn't mange to implement it yet. Sorry!";
+}
 
 
 
@@ -579,7 +583,7 @@ async function getImage() {
     storeLike();
   };
   buttonDislike.onclick = function() {
-    storeDislike();
+    storeLike();
   };
 
   buttonDeleteSeenList.onclick = function() {
