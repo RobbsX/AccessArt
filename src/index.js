@@ -47,7 +47,7 @@ function loginToSelectedIdP() {
   return login({
     oidcIssuer: SELECTED_IDP,
     redirectUrl: window.location.href,
-    clientName: "Getting started app"
+    clientName: "V&A Virtual Museum",
   });
 }
 

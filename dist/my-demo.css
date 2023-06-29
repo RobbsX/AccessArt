@@ -1,5 +1,6 @@
-h2,h3 {
+h1,h2,h3 {
     margin: 1rem 1.2rem 1rem 1.4rem;
+    font-size: 40px;
 }
 
 body * {
@@ -114,6 +115,9 @@ dd {
  }
 
  h3#imgTitle {
+   text-align: center;
+   font-weight: bold;
+   font-size: 30px;
    margin-top: 0;
  }
 
@@ -124,6 +128,7 @@ dd {
 
  p#imgParagraph {
    text-align: center;
+   font-size: 20px;
  }
 
  #labelCreateStatus {
