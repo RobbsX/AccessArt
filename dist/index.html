@@ -27,25 +27,77 @@
 
       </select>
       <button name="btnLogin" id="btnLogin">Login</button>
-    </div>
-    <div class="row">
+
       <label id="readlabel" for="myWebID">Your WebID: </label>
-      <input type="text" id="myWebID" name="myWebID" size="50" disabled>
+      <input type="text" id="myWebID" name="myWebID" size="30" disabled>
 
-      <button name="btnRead" id="btnRead">Get Pod URL(s)</button>
+      <button name="btnRead" id="btnRead" disabled>Get Pod URL(s) </button>
 
-      <div>
-        <label id="podlabel" for="select-pod">Your Pod: </label>
-        <select id="select-pod" name="select-pod" widths: 120>
-          <option value="">--Please select your Pod--</option>
-        </select><!--getting-started/readingList/mySeenList-->
-      </div>
+      <label id="podlabel" for="select-pod">Your Pod: </label>
+      <select id="select-pod" name="select-pod" widths: 120>
+        <option value="">--Please select your Pod--</option>
+      </select><!--getting-started/readingList/mySeenList-->
+    </div>
       <div class="row">
-        <label>Status: </label>
+        <label>Status:</label>
         <span id="labelCreateStatus"></span>
       </div>
     </div>
   </section>
+
+  <!-- Test Visual Representation -->
+  <div class="panel"> 
+    <div class="row"> 
+      <!-- title of data -->
+      <div class="col-sm-12">
+        <h3 id="imgTitle"></h3>
+    </div>
+  </div>
+    <!-- JSON Row -->
+  <div class="panel"> 
+    <div class="row"> 
+      <div class="col-sm-6">
+        <img id="img" src="" alt="Image" class="img-responsive" style="height:100%"/>
+      </div>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
+        <p class="text-center align-middle" id="imgParagraph"></p>
+      </div>
+        <div class="col-sm-1"></div>
+    </div>
+  </div>
+    <!-- Button Row -->
+  <div class="panel"> 
+    <div class="row"> 
+      <div class="col-sm-6">
+        <button type="buttonNext" id="btnNext" class="btn btn-primary btn-block">Next</button>  
+      </div>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
+        <div class="btn-group btn-group-justified">
+          <a id="btnDislike" href="#" class="btn btn-danger glyphicon glyphicon-thumbs-down"></a>
+          <a id="btnLike" href="#" class="btn btn-success glyphicon glyphicon-thumbs-up"></a>
+        </div>
+      <div class="col-sm-1"></div>
+      </div>
+    </div>
+  </div> 
+  <br>
+
+  
+
+  <div> 
+    <h3>Read mySeenList</h3>
+    <button name="btnDeleteSeenList" id="btnDeleteSeenList">Delete mySeenList</button>
+    <p id="labelmySeenList"></p>
+  </div>
+  
+</body>
+
+</html>
+
+
+
 
 <!-- 
   <div id="write" class="panel">
@@ -87,50 +139,3 @@ RDF 1.1 Primer</textarea>
       </div>
     </div>
   </div> -->
-
-  <!-- Test Visual Representation -->
-  <div class="panel"> 
-    <div class="row"> 
-      <!-- title of data -->
-      <div class="col-sm-12">
-        <h3 id="imgTitle"></h3>
-    </div>
-    <!-- JSON Row -->
-    <div class="row"> 
-      <div class="col-sm-6">
-        <img id="img" src="" alt="Image" class="img-responsive" style="height:100%"/>
-      </div>
-      <div class="col-sm-1"></div>
-      <div class="col-sm-4">
-        <p class="text-center align-middle" id="imgParagraph"></p>
-      </div>
-      <div class="col-sm-1"></div>
-    </div>
-    <!-- Button Row -->
-    <div class="row"> 
-      <div class="col-sm-6">
-        <button type="buttonNext" id="btnNext" class="btn btn-primary btn-block">Next</button>  
-      </div>
-      <div class="col-sm-1"></div>
-      <div class="col-sm-4">
-        <div class="btn-group btn-group-justified">
-          <a id="btnDislike" href="#" class="btn btn-danger glyphicon glyphicon-thumbs-down"></a>
-          <a id="btnLike" href="#" class="btn btn-success glyphicon glyphicon-thumbs-up"></a>
-        </div>
-      <div class="col-sm-1"></div>
-      </div>
-    </div>
-  </div>
-  <br>
-
-  
-
-  <div> 
-    <h3>Read mySeenList</h3>
-    <button name="btnDeleteSeenList" id="btnDeleteSeenList">Delete mySeenList</button>
-    <p id="labelmySeenList"></p>
-  </div>
-  
-</body>
-
-</html>

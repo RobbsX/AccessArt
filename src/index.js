@@ -416,7 +416,7 @@ async function displayImage(image) {
   console.log(image);
   try {
     if (true) {
-      img.src = "https://framemark.vam.ac.uk/collections/" + image["images"][0] + "/full/!1000,1000/0/default.jpg";
+      img.src = "https://framemark.vam.ac.uk/collections/" + image["images"][0] + "/full/!750,750/0/default.jpg";
       // Set the title attribute to the next image in the list
       if ( image["titles"] == [] || image["titles"].length === 0) {
         if (image["objectType"] == [] || image["objectType"].length === 0) {
