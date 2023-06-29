@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Getting Started: Inrupt JavaScript Client Libraries</title>
+  <title>Your Virtual Galery</title>
   <script defer src="./index.js"></script>
   <!-- <script defer src="/src/app.js"></script> -->
   <link rel="stylesheet" href="my-demo.css" />
@@ -12,12 +12,12 @@
 
 <body>
   <header>
-    <h2>Getting Started</h2>
-    <h3>with Inrupt JavaScript Client Libraries</h3>
+    <h2>Victoria & Albert Hall Virtual Galery</h2>
+    <h3>by Robin Kulha & Maroan El Sirfy</h3>
   </header>
   <section id="login" class="panel">
     <div class="row">
-      <label id="labelIdP" for="select-idp">1. Select your Identity Provider: </label>
+      <label id="labelIdP" for="select-idp">Your Identity Provider: </label>
       <select id="select-idp" name="select-idp">
         
         <!-- Update the select-idp option if not using PodSpaces -->
@@ -28,17 +28,26 @@
       </select>
       <button name="btnLogin" id="btnLogin">Login</button>
     </div>
-  </section>
-
-  <div id="read" class="panel">
     <div class="row">
-      <label id="readlabel" for="myWebID">2. Logged in with your WebID: </label>
+      <label id="readlabel" for="myWebID">Your WebID: </label>
       <input type="text" id="myWebID" name="myWebID" size="50" disabled>
 
       <button name="btnRead" id="btnRead">Get Pod URL(s)</button>
-    </div>
-  </div>
 
+      <div>
+        <label id="podlabel" for="select-pod">Your Pod: </label>
+        <select id="select-pod" name="select-pod" widths: 120>
+          <option value="">--Please select your Pod--</option>
+        </select><!--getting-started/readingList/mySeenList-->
+      </div>
+      <div class="row">
+        <label>Status: </label>
+        <span id="labelCreateStatus"></span>
+      </div>
+    </div>
+  </section>
+
+<!-- 
   <div id="write" class="panel">
     <div class="row">
       <label id="writelabel">3.Create a private reading list in my Pod.</label>
@@ -50,7 +59,7 @@
 
         <select id="select-pod" name="select-pod" widths: 120>
           <option value="">--Please select your Pod--</option>
-        </select>getting-started/readingList/myList
+        </select>getting-started/readingList/mySeenList
       </div>
     </div>
     <br>
@@ -77,7 +86,7 @@ RDF 1.1 Primer</textarea>
         <textarea id="savedtitles" name="savedtitles" rows="5" cols="42" disabled></textarea>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Test Visual Representation -->
   <div class="panel"> 

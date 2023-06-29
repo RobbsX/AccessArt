@@ -32,11 +32,11 @@ import { SCHEMA_INRUPT, RDF, AS } from "@inrupt/vocab-common-rdf";
 const selectorIdP = document.querySelector("#select-idp");
 const selectorPod = document.querySelector("#select-pod");
 const buttonLogin = document.querySelector("#btnLogin");
-const buttonRead = document.querySelector("#btnRead");
-const buttonCreate = document.querySelector("#btnCreate");
+// const buttonRead = document.querySelector("#btnRead");
+// const buttonCreate = document.querySelector("#btnCreate");
 const labelCreateStatus = document.querySelector("#labelCreateStatus");
 
-buttonRead.setAttribute("disabled", "disabled");
+// buttonRead.setAttribute("disabled", "disabled");
 // buttonLogin.setAttribute("disabled", "disabled");
 // buttonCreate.setAttribute("disabled", "disabled");
 
@@ -62,7 +62,7 @@ async function handleRedirectAfterLogin() {
     document.getElementById("myWebID").value = session.info.webId;
 
     // Enable Read button to read Pod URL
-    buttonRead.removeAttribute("disabled");
+    // buttonRead.removeAttribute("disabled");
 
     // Get Pod URL(s) associated with the WebID
     await getMyPods();
@@ -314,13 +314,13 @@ buttonLogin.onclick = async function () {
   await loginToSelectedIdP();  // Made async to wait for login to complete
 };
 
-buttonRead.onclick = function () {
-  getMyPods();
-};
+// buttonRead.onclick = function () {
+//   getMyPods();
+// };
 
-buttonCreate.onclick = function () {
-  createList();
-};
+// buttonCreate.onclick = function () {
+//   createList();
+// };
   
 // Changes Login Button to (dis)abled by value IF select-idp == "--Please select an Identity Provider (IdP)--"
 
@@ -364,7 +364,7 @@ async function getImageListNotSeen() {
   let response;
   try {
     // Get V&A API
-    response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=4&images_exist=1"); 
+    response = await fetch("https://api.vam.ac.uk/v2/objects/search?page_size=10&images_exist=1"); 
     jsonData = await response.json();
   } catch (error) {
     console.log("Error processing V&A API.");
@@ -416,16 +416,25 @@ async function displayImage(image) {
   console.log(image);
   try {
     if (true) {
-      img.src = "https://framemark.vam.ac.uk/collections/" + image["images"][0] + "/full/!500,500/0/default.jpg";
+      img.src = "https://framemark.vam.ac.uk/collections/" + image["images"][0] + "/full/!1000,1000/0/default.jpg";
       // Set the title attribute to the next image in the list
       if ( image["titles"] == [] || image["titles"].length === 0) {
-        imgTitle.innerHTML = "No Title";
+        if (image["objectType"] == [] || image["objectType"].length === 0) {
+          imgTitle.innerHTML = "No Title";
+        } else {
+          imgTitle.innerHTML = image["objectType"];
+        }
       } else {
         imgTitle.innerHTML = image["titles"][0]["title"];
       }
+
       // Set the description attribute to the next image in the list
       if (image["summaryDescription"] === "" || image["summaryDescription"].length === 0) {
-        imgParagraph.innerHTML = "No Description";
+        if (image["briefDescription"] == [] || image["briefDescription"].length === 0) {
+          imgParagraph.innerHTML = "No Description";
+        } else {
+          imgParagraph.innerHTML = image["briefDescription"];
+        }
       } else {
         imgParagraph.innerHTML = image["summaryDescription"];
       }
