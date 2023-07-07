@@ -34,7 +34,7 @@ The application in a nutshell: A webapp that shows users artworks of Victoria & 
 The Victoria and Alberthall Museum API has great [documentation](https://developers.vam.ac.uk/guide/v2/welcome.html) and examples on [their Github](https://github.com/vanda/etc-docs) while following API standards, making it ideal for this use case. 
 
 <img width="800" alt="Mockup image" src="https://github.com/RobbsX/AccessArt/assets/79597633/bd333805-8135-44a3-a2f2-a020eaad173e">
-This is a mockup image of the structure of the AccessArt Solid Application that is being built in this project. 
+\This is a mockup image of the structure of the AccessArt Solid Application that is being built in this project. 
 
 
 
@@ -70,6 +70,13 @@ The app assumes npm installed and uses [webpack](https://webpack.js.org/guides/g
 ```sh
 npm install webpack webpack-cli webpack-dev-server css-loader style-loader --save-dev
 ```
+
+To let it run:
+```sh
+npm run build && npm run start
+```
+Note: You might run into errors if `npm install` did not properly install all necessay packages. The easy solution is to delete the node_modules folder and reinstall all using `npm install`. 
+
 
 <!-- STORING AND GETTING DATA FROM SOLID PODS -->
 ### Storing and Getting Data from Solid Pods
@@ -136,4 +143,4 @@ Project Link: [https://github.com/RobbsX/AccessArt](https://github.com/RobbsX/Ac
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-We want to thank Professor Dr Sabrina Kirrane at WU Wien for allowig us to conduct this project as part of her Data Science Masters's course. 
+We want to thank Professor Dr Sabrina Kirrane at WU Wien for allowing us to conduct this project as part of her Data Science Masters's course. 
