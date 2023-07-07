@@ -1,5 +1,7 @@
 <h2 align="center">AccessArt</h2>
 
+This is a README of Project: [https://github.com/RobbsX/AccessArt](https://github.com/RobbsX/AccessArt)
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -33,8 +35,9 @@ The application in a nutshell: A webapp that shows users artworks of Victoria & 
 
 The Victoria and Alberthall Museum API has great [documentation](https://developers.vam.ac.uk/guide/v2/welcome.html) and examples on [their Github](https://github.com/vanda/etc-docs) while following API standards, making it ideal for this use case. 
 
-<img width="800" alt="Mockup image" src="https://github.com/RobbsX/AccessArt/assets/79597633/bd333805-8135-44a3-a2f2-a020eaad173e">
-\This is a mockup image of the structure of the AccessArt Solid Application that is being built in this project. 
+<img width="800" alt="Mockup image" src="https://github.com/RobbsX/AccessArt/assets/79597633/bd333805-8135-44a3-a2f2-a020eaad173e" >
+
+This is a mockup image of the structure of the AccessArt Solid Application that is being built in this project. 
 
 
 
