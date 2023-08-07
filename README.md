@@ -29,7 +29,7 @@ This is a README of Project: [https://github.com/RobbsX/AccessArt](https://githu
 ## About the Project
 
 _Is creating a decentralized application a **viable** alternative to centralized?_\
-The goal is to find out how complicated it is building an application using the SOLID project. 
+The goal is to find out how complicated it is building an application using the SOLID project. Thus, the focus lies on the usage of the SOLID Framework, not on building a perfect web application. 
 
 The application in a nutshell: A webapp that shows users artworks of Victoria & Alberthall Museum using their well-maintained API. 
 
