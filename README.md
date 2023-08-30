@@ -29,15 +29,17 @@ This is a README of Project: [https://github.com/RobbsX/AccessArt](https://githu
 ## About the Project
 
 _Is creating a decentralized application a **viable** alternative to centralized?_\
-The goal is to find out how complicated it is building an application using the SOLID project. Thus, the focus lies on the usage of the SOLID Framework, not on building a perfect web application. 
+The goal is to find out how complicated it is building an application using the SOLID project. Thus, the focus lies on the usage of the [SOLID Project Framework](https://solidproject.org), so the frontend does not need to be perfect. 
 
-The application in a nutshell: A webapp that shows users artworks of Victoria & Alberthall Museum using their well-maintained API. 
+In a nutshell: A web application that shows users artworks of Victoria & Alberthall Museum using their API. 
 
-The Victoria and Alberthall Museum API has great [documentation](https://developers.vam.ac.uk/guide/v2/welcome.html) and examples on [their Github](https://github.com/vanda/etc-docs) while following API standards, making it ideal for this use case. 
+The Victoria and Alberthall Museum API has great [documentation](https://developers.vam.ac.uk/guide/v2/welcome.html) while following API standards, making it ideal for this use case. 
 
-<img width="800" alt="Mockup image" src="https://github.com/RobbsX/AccessArt/assets/79597633/bd333805-8135-44a3-a2f2-a020eaad173e" >
+<img width="600" alt="Mockup image" src="https://github.com/RobbsX/AccessArt/assets/79597633/bd333805-8135-44a3-a2f2-a020eaad173e" >
 
 This is a mockup image of the structure of the AccessArt Solid Application that is being built in this project. 
+
+
 
 
 
